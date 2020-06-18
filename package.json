@@ -16,8 +16,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github_account/react-native-zendesk-chat-providers.git",
-    "baseUrl": "https://github.com/github_account/react-native-zendesk-chat-providers"
+    "url": "git+https://github.com/ParthNandaniya/react-native-zendesk-chat-providers.git",
+    "baseUrl": "https://github.com/ParthNandaniya/react-native-zendesk-chat-providers"
   },
   "keywords": [
     "react",
