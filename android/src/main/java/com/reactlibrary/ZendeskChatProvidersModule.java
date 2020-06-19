@@ -63,7 +63,7 @@ public class ZendeskChatProvidersModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setVisitorInfo(ReadableMap details, final Promise promise) {
+    public void setVisitorInfo(ReadableMap details, Promise promise) {
 
         if(this.isAccountInitialized() == false) {
             promise.reject("400", "Account needs to be initialized first");
@@ -119,7 +119,7 @@ public class ZendeskChatProvidersModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void addVisitorTags(ReadableArray tags, final Promise promise) {
+    public void addVisitorTags(ReadableArray tags, Promise promise) {
         if(this.isVisitorInfoSet() == true) {
 
             this.profileProvider.addVisitorTags((List<String>) tags, new ZendeskCallback<Void>() {
@@ -139,7 +139,7 @@ public class ZendeskChatProvidersModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void removeVisitorTags(ReadableArray tags, final Promise promise) {
+    public void removeVisitorTags(ReadableArray tags, Promise promise) {
         if(this.isVisitorInfoSet() == true) {
 
             this.profileProvider.removeVisitorTags((List<String>) tags, new ZendeskCallback<Void>() {
@@ -173,7 +173,7 @@ public class ZendeskChatProvidersModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getAccount(final Promise promise) {
+    public void getAccount(Promise promise) {
         accountProvider.getAccount(new ZendeskCallback<Account>() {
             @Override
             public void onSuccess(Account account) {
@@ -195,7 +195,7 @@ public class ZendeskChatProvidersModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void observeChatState(Promise promise) {
+    public void observeAccountState(Promise promise) {
         accountProvider.observeAccount(observationScope, new Observer<Account>() {
             @Override
             public void update(Account account) {

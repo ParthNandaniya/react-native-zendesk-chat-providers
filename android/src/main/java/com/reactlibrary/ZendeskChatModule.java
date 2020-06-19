@@ -36,7 +36,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
     }
 
     @ReactMethod
-    public void setDepartment(String name, final Promise promise) {
+    public void setDepartment(String name, Promise promise) {
 
         if(super.isVisitorInfoSet()) {
             if(chatState.isChatting() == true) {
@@ -61,7 +61,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
     }
 
     @ReactMethod
-    public void setDepartment(double departmentID, final Promise promise) {
+    public void setDepartment(double departmentID, Promise promise) {
 
         if(super.isVisitorInfoSet()) {
 
@@ -96,7 +96,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
     }
 
     @ReactMethod
-    public void clearDepartment(final Promise promise) {
+    public void clearDepartment(Promise promise) {
         if(super.isVisitorInfoSet()) {
             if(chatState.isChatting() == true) {
                 chatProvider.clearDepartment(new ZendeskCallback<Void>() {
@@ -127,7 +127,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
 
 
     @ReactMethod
-    public void sendChatRating(String rating, final Promise promise) {
+    public void sendChatRating(String rating, Promise promise) {
 
         ChatRating rate;
         if(rating == "good" || rating == "GOOD") {
@@ -139,7 +139,6 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
         chatProvider.sendChatRating(rate, new ZendeskCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                isDepartmentSet = false;
                 promise.resolve("Successful");
             }
 
@@ -151,7 +150,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
     }
 
     @ReactMethod
-    public void sendChatComment(String comment, final Promise promise) {
+    public void sendChatComment(String comment, Promise promise) {
         chatProvider.sendChatComment(comment, new ZendeskCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -166,7 +165,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
     }
 
     @ReactMethod
-    public void sendEmailTranscript(String email, final Promise promise) {
+    public void sendEmailTranscript(String email, Promise promise) {
         chatProvider.sendEmailTranscript(email, new ZendeskCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -181,7 +180,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
     }
 
     @ReactMethod
-    public void endChat(final Promise promise) {
+    public void endChat(Promise promise) {
         chatProvider.endChat(new ZendeskCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -229,7 +228,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
     }
 
     @ReactMethod
-    public void sendOfflineForm(String message, final Promise promise) {
+    public void sendOfflineForm(String message, Promise promise) {
 //     NOTE: that this method should only be used when the Account or Department status is offline.
 
         if(chatState.getDepartment().getStatus() == chatState.getDepartment().getStatus().OFFLINE) {
