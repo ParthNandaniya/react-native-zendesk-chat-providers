@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import zendesk.chat.Account;
 import zendesk.chat.AccountProvider;
 import zendesk.chat.Chat;
+import zendesk.chat.ChatProvider;
 import zendesk.chat.ObservationScope;
 import zendesk.chat.Observer;
 import zendesk.chat.ProfileProvider;
@@ -32,6 +33,7 @@ public class ZendeskChatProvidersModule extends ReactContextBaseJavaModule {
     private boolean isAccountFetched = false;
     private ProfileProvider profileProvider;
     private AccountProvider accountProvider;
+    private ChatProvider chatProvider;
     private ObservationScope observationScope = new ObservationScope();
     private VisitorInfo visitorInfo;
 
@@ -51,6 +53,7 @@ public class ZendeskChatProvidersModule extends ReactContextBaseJavaModule {
         Chat.INSTANCE.init(this.reactContext, accKey, appID);
         accountProvider = Chat.INSTANCE.providers().accountProvider();
         profileProvider = Chat.INSTANCE.providers().profileProvider();
+        chatProvider = Chat.INSTANCE.providers().chatProvider();;
         this.isAccountInitialized = true;
     }
 
@@ -61,6 +64,10 @@ public class ZendeskChatProvidersModule extends ReactContextBaseJavaModule {
 
     public boolean isAccountInitialized() {
         return this.isAccountInitialized;
+    }
+
+    public ChatProvider getChatProvider() {
+        return this.chatProvider;
     }
 
     @ReactMethod

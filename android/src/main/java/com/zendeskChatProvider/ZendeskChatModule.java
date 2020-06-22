@@ -24,13 +24,14 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
     private final ReactApplicationContext reactContext;
     private boolean isDepartmentSet = false;
     private boolean isSessionStarted = false;
-    private ChatProvider chatProvider = Chat.INSTANCE.providers().chatProvider();;
+    private ChatProvider chatProvider;
     private ObservationScope observationScope = new ObservationScope();
     private ChatState chatState;
 
     public ZendeskChatModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+        this.chatProvider = super.getChatProvider();
     }
 
     @ReactMethod
