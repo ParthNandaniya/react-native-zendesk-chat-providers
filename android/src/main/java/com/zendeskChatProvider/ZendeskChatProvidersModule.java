@@ -1,4 +1,4 @@
-package com.reactlibrary;
+package com.zendeskChatProvider;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;

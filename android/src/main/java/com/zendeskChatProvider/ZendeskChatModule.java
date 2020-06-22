@@ -1,4 +1,4 @@
-package com.reactlibrary;
+package com.zendeskChatProvider;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -9,8 +9,6 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.zendesk.service.ErrorResponse;
 import com.zendesk.service.ZendeskCallback;
-
-import java.io.File;
 
 import androidx.annotation.Nullable;
 import zendesk.chat.Chat;
