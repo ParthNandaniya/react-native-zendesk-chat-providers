@@ -15,7 +15,7 @@ public class ZendeskChatProvidersPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new ZendeskChatModule(reactContext));
+        modules.add(new ZendeskChatProvidersModule(reactContext));
         modules.add(new ZendeskChatModule(reactContext));
         return modules;
     }
