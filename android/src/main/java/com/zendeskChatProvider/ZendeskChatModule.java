@@ -24,22 +24,19 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
     private final ReactApplicationContext reactContext;
     private boolean isDepartmentSet = false;
     private boolean isSessionStarted = false;
-    private ChatProvider chatProvider;
     private ObservationScope observationScope = new ObservationScope();
-    private ChatState chatState;
 
     public ZendeskChatModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
-        this.chatProvider = super.getChatProvider();
     }
 
     @ReactMethod
     public void setDepartment(String name, final Promise promise) {
 
         if(super.isVisitorInfoSet()) {
-            if(chatState.isChatting() == true) {
-                chatProvider.setDepartment("Department name", new ZendeskCallback<Void>() {
+            if(super.getChatProvider().getChatState().isChatting() == true) {
+                super.getChatProvider().setDepartment("Department name", new ZendeskCallback<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         isDepartmentSet = true;
@@ -64,8 +61,8 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
 
         if(super.isVisitorInfoSet()) {
 
-            if(chatState.isChatting() == true) {
-                chatProvider.setDepartment((long) departmentID, new ZendeskCallback<Void>() {
+            if(super.getChatProvider().getChatState().isChatting() == true) {
+                super.getChatProvider().setDepartment((long) departmentID, new ZendeskCallback<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         isDepartmentSet = true;
@@ -97,8 +94,8 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
     @ReactMethod
     public void clearDepartment(final Promise promise) {
         if(super.isVisitorInfoSet()) {
-            if(chatState.isChatting() == true) {
-                chatProvider.clearDepartment(new ZendeskCallback<Void>() {
+            if(super.getChatProvider().getChatState().isChatting() == true) {
+                super.getChatProvider().clearDepartment(new ZendeskCallback<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         isDepartmentSet = false;
@@ -120,7 +117,8 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
 
     @ReactMethod
     public void sendRequestChat(Promise promise) {
-        chatProvider.requestChat();
+        super.getChatProvider().requestChat();
+        this.isSessionStarted = true;
         promise.resolve("Successful");
     }
 
@@ -135,7 +133,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
             rate = ChatRating.BAD;
         }
 
-        chatProvider.sendChatRating(rate, new ZendeskCallback<Void>() {
+        super.getChatProvider().sendChatRating(rate, new ZendeskCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 promise.resolve("Successful");
@@ -150,7 +148,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
 
     @ReactMethod
     public void sendChatComment(String comment, final Promise promise) {
-        chatProvider.sendChatComment(comment, new ZendeskCallback<Void>() {
+        super.getChatProvider().sendChatComment(comment, new ZendeskCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 promise.resolve("Successful");
@@ -165,7 +163,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
 
     @ReactMethod
     public void sendEmailTranscript(String email, final Promise promise) {
-        chatProvider.sendEmailTranscript(email, new ZendeskCallback<Void>() {
+        super.getChatProvider().sendEmailTranscript(email, new ZendeskCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 promise.resolve("Successful");
@@ -180,7 +178,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
 
     @ReactMethod
     public void endChat(final Promise promise) {
-        chatProvider.endChat(new ZendeskCallback<Void>() {
+        super.getChatProvider().endChat(new ZendeskCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 promise.resolve("Successful");
@@ -195,12 +193,12 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
 
     @ReactMethod
     public void setTyping(boolean typing) {
-        chatProvider.setTyping(typing);
+        super.getChatProvider().setTyping(typing);
     }
 
     @ReactMethod
     public void sendMessage(String message, Callback callback) {
-        callback.invoke(chatProvider.sendMessage(message));
+        callback.invoke(super.getChatProvider().sendMessage(message));
     }
 
     //need to test coorectly in react native app
@@ -213,24 +211,24 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
 
     @ReactMethod
     public void reSendMessage(String failedChatLogId, Callback callback) {
-        callback.invoke(chatProvider.resendFailedFile(failedChatLogId,null));
+        callback.invoke(super.getChatProvider().resendFailedFile(failedChatLogId,null));
     }
 
 //    @ReactMethod
 //    public void resendFailedFile(String failedChatLogId, Callback callback) {
-//        callback.invoke(chatProvider.resendFailedFile(failedChatLogId,null);
+//        callback.invoke(super.getChatProvider().resendFailedFile(failedChatLogId,null);
 //    }
 
     @ReactMethod
     public void deleteFailedMessage(String failedChatLogId , Callback callback) {
-        callback.invoke(chatProvider.deleteFailedMessage(failedChatLogId));
+        callback.invoke(super.getChatProvider().deleteFailedMessage(failedChatLogId));
     }
 
     @ReactMethod
     public void sendOfflineForm(String message, final Promise promise) {
 //     NOTE: that this method should only be used when the Account or Department status is offline.
 
-        if(chatState.getDepartment().getStatus() == chatState.getDepartment().getStatus().OFFLINE) {
+        if(super.getChatProvider().getChatState().getDepartment().getStatus() == super.getChatProvider().getChatState().getDepartment().getStatus().OFFLINE) {
 
             if(super.isAccountStatusOfline()) {
 
@@ -240,11 +238,11 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
 
                         OfflineForm offlineForm = OfflineForm
                                 .builder(message)
-                                .withDepartment(chatState.getDepartment().getId())
-//                                .withDepartment(chatState.getDepartment().getName())
+                                .withDepartment(super.getChatProvider().getChatState().getDepartment().getId())
+//                                .withDepartment(chatProvider.getChatState().getDepartment().getName())
                                 .build();
 
-                        chatProvider.sendOfflineForm(offlineForm, new ZendeskCallback<Void>() {
+                        super.getChatProvider().sendOfflineForm(offlineForm, new ZendeskCallback<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 promise.resolve("Successful");
@@ -282,7 +280,7 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
 
     @ReactMethod
     public void observeChatState(Promise promise) {
-        chatProvider.observeChatState(observationScope, new Observer<ChatState>() {
+        super.getChatProvider().observeChatState(observationScope, new Observer<ChatState>() {
             @Override
             public void update(ChatState chatState) {
                 sendEvent(reactContext, "ObserveChatState", (WritableMap) chatState);
@@ -299,64 +297,64 @@ public class ZendeskChatModule extends ZendeskChatProvidersModule {
 
     @ReactMethod
     public void getChatState(Callback onSuccess) {
-        onSuccess.invoke(chatProvider.getChatState());
+        onSuccess.invoke(super.getChatProvider().getChatState());
     }
 
     @ReactMethod
     public void getDepartment(Callback onSuccess) {
-        onSuccess.invoke(chatState.getDepartment());
+        onSuccess.invoke(super.getChatProvider().getChatState().getDepartment());
     }
 
     @ReactMethod
     public void isDepartmentOfline(Callback onSuccess) {
-        onSuccess.invoke(chatState.getDepartment().getStatus() == chatState.getDepartment().getStatus().OFFLINE);
+        onSuccess.invoke(super.getChatProvider().getChatState().getDepartment().getStatus() == super.getChatProvider().getChatState().getDepartment().getStatus().OFFLINE);
     }
 
     @ReactMethod
     public void getChatId(Callback onSuccess) {
-        onSuccess.invoke(chatState.getChatId());
+        onSuccess.invoke(super.getChatProvider().getChatState().getChatId());
     }
 
     @ReactMethod
     public void getAgents(Callback onSuccess) {
-        onSuccess.invoke(chatState.getAgents());
+        onSuccess.invoke(super.getChatProvider().getChatState().getAgents());
     }
 
     @ReactMethod
     public void getChatLogs(Callback onSuccess) {
-        onSuccess.invoke(chatState.getChatLogs());
+        onSuccess.invoke(super.getChatProvider().getChatState().getChatLogs());
     }
 
     @ReactMethod
     public void getChatSessionStatus(Callback onSuccess) {
 //        INITIALIZING, CONFIGURING, STARTED, ENDING, ENDED
-        onSuccess.invoke(chatState.getChatSessionStatus());
+        onSuccess.invoke(super.getChatProvider().getChatState().getChatSessionStatus());
     }
 
     @ReactMethod
     public void isChatting(Callback onSuccess) {
-        onSuccess.invoke(chatState.isChatting());
+        onSuccess.invoke(super.getChatProvider().getChatState().isChatting());
     }
 
     @ReactMethod
     public void getQueuePosition(Callback onSuccess) {
-        onSuccess.invoke(chatState.getQueuePosition());
+        onSuccess.invoke(super.getChatProvider().getChatState().getQueuePosition());
     }
 
     @ReactMethod
     public void getChatComment(Callback onSuccess) {
-        onSuccess.invoke(chatState.getChatComment());
+        onSuccess.invoke(super.getChatProvider().getChatState().getChatComment());
     }
 
     @ReactMethod
     public void getChatRating(Callback onSuccess) {
-        onSuccess.invoke(chatState.getChatRating());
+        onSuccess.invoke(super.getChatProvider().getChatState().getChatRating());
     }
 
     // other details
 //    @ReactMethod
 //    public void getInitialMessageQuestion(Callback onSuccess) {
-//        onSuccess.invoke(chatState.getChatRating());
+//        onSuccess.invoke(super.getChatProvider().getChatState().getChatRating());
 //    }
 
 }
