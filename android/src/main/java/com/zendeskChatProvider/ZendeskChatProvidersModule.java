@@ -30,7 +30,7 @@ public class ZendeskChatProvidersModule extends ReactContextBaseJavaModule {
     private boolean isAccountInitialized = false;
     private boolean isVisitorInfoSet = false;
     private boolean isAccountFetched = false;
-    private ProfileProvider profileProvider = Chat.INSTANCE.providers().profileProvider();
+    private ProfileProvider profileProvider;
     private AccountProvider accountProvider;
     private ObservationScope observationScope = new ObservationScope();
     private VisitorInfo visitorInfo;
@@ -50,6 +50,7 @@ public class ZendeskChatProvidersModule extends ReactContextBaseJavaModule {
 
         Chat.INSTANCE.init(this.reactContext, accKey, appID);
         accountProvider = Chat.INSTANCE.providers().accountProvider();
+        profileProvider = Chat.INSTANCE.providers().profileProvider();
         this.isAccountInitialized = true;
     }
 
